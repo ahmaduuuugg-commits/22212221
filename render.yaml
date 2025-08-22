@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: haxball-tournament-server
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: frankfurt
+    plan: starter
+    buildCommand: npm ci
+    startCommand: node server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HAXBALL_TOKEN
+        sync: false
+      - key: DISCORD_WEBHOOK
+        sync: false
+      - key: DISCORD_INVITE
+        sync: false
+      - key: OWNER_PASSWORD
+        sync: false
+      - key: ROOM_NAME
+        value: "🎮 RHL TOURNAMENT 🎮"
+      - key: MAX_PLAYERS
+        value: "16"
+      - key: GEO_CODE
+        value: "eg"
+      - key: GEO_LAT
+        value: "30.0444"
+      - key: GEO_LON
+        value: "31.2357"
+      - key: DISCORD_CHANNEL_ID
+        sync: false
+      - key: DISCORD_REPORT_ROLE_ID
+        sync: false
+      - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        value: "true"
+      - key: PUPPETEER_EXECUTABLE_PATH
+        value: "/usr/bin/google-chrome-stable"
+    autoDeploy: true
+    disk:
+      name: haxball-data
+      mountPath: /data
+      sizeGB: 1

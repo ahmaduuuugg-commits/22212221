@@ -1,0 +1,54 @@
+2025-08-22T16:45:02.150925809Z #11 10.41 
+2025-08-22T16:45:02.150931229Z #11 10.41 28 packages are looking for funding
+2025-08-22T16:45:02.150935829Z #11 10.41   run `npm fund` for details
+2025-08-22T16:45:02.150939989Z #11 10.41 
+2025-08-22T16:45:02.150943939Z #11 10.41 found 0 vulnerabilities
+2025-08-22T16:45:02.15094909Z #11 10.41 npm notice
+2025-08-22T16:45:02.150953999Z #11 10.41 npm notice New major version of npm available! 10.8.2 -> 11.5.2
+2025-08-22T16:45:02.150958519Z #11 10.41 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.5.2
+2025-08-22T16:45:02.15096276Z #11 10.41 npm notice To update run: npm install -g npm@11.5.2
+2025-08-22T16:45:02.15096698Z #11 10.41 npm notice
+2025-08-22T16:45:07.997332663Z #11 DONE 16.3s
+2025-08-22T16:45:08.148110263Z 
+2025-08-22T16:45:08.148127764Z #12 [7/8] COPY . .
+2025-08-22T16:45:08.298337147Z #12 DONE 0.2s
+2025-08-22T16:45:08.298349237Z 
+2025-08-22T16:45:08.298354067Z #13 [8/8] RUN groupadd -r haxball && useradd -r -g haxball -G audio,video haxball     && mkdir -p /home/haxball/Downloads     && chown -R haxball:haxball /home/haxball     && chown -R haxball:haxball /app
+2025-08-22T16:46:52.597968056Z #13 DONE 104.4s
+2025-08-22T16:46:52.748395434Z 
+2025-08-22T16:46:52.755698408Z #14 exporting to docker image format
+2025-08-22T16:46:52.899079126Z #14 exporting layers
+2025-08-22T16:47:32.591008423Z #14 exporting layers 39.6s done
+2025-08-22T16:47:32.591034603Z #14 exporting manifest sha256:9ea44e92a90c23501949ed8a67487b9bbd6d63cbdd36bafbe5d1832ad27f3fb0 0.0s done
+2025-08-22T16:47:32.591040083Z #14 exporting config sha256:e4ad08bae1c39e153bb0275db8bb06d473df3c4225e34960bb4244ad6aeeec28 0.0s done
+2025-08-22T16:47:41.14336303Z #14 DONE 48.3s
+2025-08-22T16:47:41.143399291Z 
+2025-08-22T16:47:41.143403381Z #15 exporting cache to client directory
+2025-08-22T16:47:41.143405701Z #15 preparing build cache for export
+2025-08-22T16:47:58.705423582Z #15 writing cache manifest sha256:2f28fea026f4600cc88918cef352d085c60956a58e0e35a8b88bb57ef0f7136e done
+2025-08-22T16:47:58.705440003Z #15 DONE 17.6s
+2025-08-22T16:47:59.981415018Z Pushing image to registry...
+2025-08-22T16:48:18.686324041Z Upload succeeded
+2025-08-22T16:48:21.546383451Z ==> Deploying...
+2025-08-22T16:48:49.841995457Z [dotenv@17.2.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+2025-08-22T16:48:49.939451097Z 2025-08-22 16:48:49 [INFO]: Server running on port 10000
+2025-08-22T16:48:49.939820325Z 2025-08-22 16:48:49 [INFO]: Initializing Haxball room...
+2025-08-22T16:48:49.940142702Z 2025-08-22 16:48:49 [INFO]: Creating new Haxball room...
+2025-08-22T16:48:49.940479639Z 2025-08-22 16:48:49 [INFO]: Initializing Puppeteer browser...
+2025-08-22T16:48:52.75385753Z ==> Your service is live 🎉
+2025-08-22T16:48:52.786194557Z ==> 
+2025-08-22T16:48:52.822332114Z ==> ///////////////////////////////////////////////////////////
+2025-08-22T16:48:52.86203024Z ==> 
+2025-08-22T16:48:52.898823727Z ==> Available at your primary URL https://pls-r4le.onrender.com
+2025-08-22T16:48:52.933245643Z ==> 
+2025-08-22T16:48:52.965646991Z ==> ///////////////////////////////////////////////////////////
+2025-08-22T16:48:53.231413073Z 2025-08-22 16:48:53 [INFO]: Browser initialized successfully
+2025-08-22T16:48:58.544797934Z 2025-08-22 16:48:58 [INFO]: Navigated to Haxball headless page
+2025-08-22T16:49:01.548855848Z 2025-08-22 16:49:01 [INFO]: WebRTC test passed - connection candidates found
+2025-08-22T16:49:01.634720652Z 2025-08-22 16:49:01 [ERROR]: Failed to create Haxball room: process is not defined
+2025-08-22T16:49:01.635040739Z 2025-08-22 16:49:01 [ERROR]: Failed to initialize Haxball room: process is not defined
+2025-08-22T16:49:31.636004193Z 2025-08-22 16:49:31 [INFO]: Creating new Haxball room...
+2025-08-22T16:49:35.236025723Z 2025-08-22 16:49:35 [INFO]: Navigated to Haxball headless page
+2025-08-22T16:49:38.249734654Z 2025-08-22 16:49:38 [INFO]: WebRTC test passed - connection candidates found
+2025-08-22T16:49:38.335353403Z 2025-08-22 16:49:38 [ERROR]: Failed to create Haxball room: process is not defined
+2025-08-22T16:49:38.335629219Z 2025-08-22 16:49:38 [ERROR]: Retry failed: process is not defined

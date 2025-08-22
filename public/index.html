@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 RHL Tournament Server</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-gamepad"></i> RHL Tournament Server</h1>
+            <p class="subtitle">Haxball Tournament Room Status Dashboard</p>
+        </header>
+
+        <div class="status-grid">
+            <div class="status-card" id="server-status">
+                <div class="status-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="status-info">
+                    <h3>Server Status</h3>
+                    <p class="status-value" id="server-value">Loading...</p>
+                </div>
+            </div>
+
+            <div class="status-card" id="room-status">
+                <div class="status-icon">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <div class="status-info">
+                    <h3>Room Status</h3>
+                    <p class="status-value" id="room-value">Loading...</p>
+                </div>
+            </div>
+
+            <div class="status-card" id="players-status">
+                <div class="status-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="status-info">
+                    <h3>Players Online</h3>
+                    <p class="status-value" id="players-value">Loading...</p>
+                </div>
+            </div>
+
+            <div class="status-card" id="uptime-status">
+                <div class="status-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="status-info">
+                    <h3>Uptime</h3>
+                    <p class="status-value" id="uptime-value">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-section">
+            <div class="detail-card">
+                <h3><i class="fas fa-heartbeat"></i> Health Metrics</h3>
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="metric-label">Last Heartbeat:</span>
+                        <span class="metric-value" id="heartbeat-value">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Memory Usage:</span>
+                        <span class="metric-value" id="memory-value">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Restart Count:</span>
+                        <span class="metric-value" id="restart-value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-gamepad"></i> Room Information</h3>
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="metric-label">Room Name:</span>
+                        <span class="metric-value" id="room-name-value">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Started:</span>
+                        <span class="metric-value" id="start-time-value">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Location:</span>
+                        <span class="metric-value">Egypt 🇪🇬</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-section">
+            <button class="action-btn" onclick="restartRoom()">
+                <i class="fas fa-redo"></i> Restart Room
+            </button>
+            <button class="action-btn" onclick="refreshStatus()">
+                <i class="fas fa-sync"></i> Refresh Status
+            </button>
+        </div>
+
+        <div class="links-section">
+            <a href="https://discord.gg/R3Rtwqqhwm" target="_blank" class="link-btn discord">
+                <i class="fab fa-discord"></i> Join Discord
+            </a>
+            <a href="https://www.haxball.com" target="_blank" class="link-btn haxball">
+                <i class="fas fa-soccer-ball"></i> Haxball.com
+            </a>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 RHL Tournament Server. Auto-refreshes every 10 seconds.</p>
+        </footer>
+    </div>
+
+    <script>
+        let statusInterval;
+
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                updateStatus(data);
+            } catch (error) {
+                console.error('Error fetching status:', error);
+                showError();
+            }
+        }
+
+        function updateStatus(data) {
+            // Server status
+            document.getElementById('server-value').textContent = data.server === 'running' ? 'Online' : 'Offline';
+            document.getElementById('server-status').className = 'status-card ' + (data.server === 'running' ? 'online' : 'offline');
+
+            // Room status
+            document.getElementById('room-value').textContent = data.room === 'active' ? 'Active' : 'Inactive';
+            document.getElementById('room-status').className = 'status-card ' + (data.room === 'active' ? 'online' : 'offline');
+
+            // Players
+            document.getElementById('players-value').textContent = data.playersCount || '0';
+
+            // Uptime
+            const uptimeHours = Math.floor(data.uptime / 3600);
+            const uptimeMinutes = Math.floor((data.uptime % 3600) / 60);
+            document.getElementById('uptime-value').textContent = `${uptimeHours}h ${uptimeMinutes}m`;
+
+            // Health metrics
+            if (data.lastHeartbeat) {
+                const heartbeat = new Date(data.lastHeartbeat);
+                document.getElementById('heartbeat-value').textContent = heartbeat.toLocaleTimeString();
+            }
+
+            if (data.memory) {
+                const memoryMB = Math.round(data.memory.heapUsed / 1024 / 1024);
+                document.getElementById('memory-value').textContent = `${memoryMB} MB`;
+            }
+
+            document.getElementById('restart-value').textContent = data.restartCount || '0';
+
+            // Update other fields
+            updateRoomInfo();
+        }
+
+        async function updateRoomInfo() {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                
+                document.getElementById('room-name-value').textContent = data.roomName || 'RHL Tournament';
+                
+                if (data.startTime) {
+                    const startTime = new Date(data.startTime);
+                    document.getElementById('start-time-value').textContent = startTime.toLocaleString();
+                }
+            } catch (error) {
+                console.error('Error fetching room info:', error);
+            }
+        }
+
+        function showError() {
+            document.getElementById('server-value').textContent = 'Error';
+            document.getElementById('room-value').textContent = 'Error';
+            document.getElementById('players-value').textContent = 'Error';
+            document.getElementById('uptime-value').textContent = 'Error';
+            
+            document.getElementById('server-status').className = 'status-card offline';
+            document.getElementById('room-status').className = 'status-card offline';
+        }
+
+        async function restartRoom() {
+            try {
+                const response = await fetch('/restart', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Room restart initiated successfully!');
+                    setTimeout(fetchStatus, 5000); // Refresh after 5 seconds
+                } else {
+                    alert('Failed to restart room: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error restarting room: ' + error.message);
+            }
+        }
+
+        function refreshStatus() {
+            fetchStatus();
+        }
+
+        // Start status updates
+        function startStatusUpdates() {
+            fetchStatus(); // Initial fetch
+            statusInterval = setInterval(fetchStatus, 10000); // Every 10 seconds
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', startStatusUpdates);
+
+        // Handle page visibility to pause/resume updates
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearInterval(statusInterval);
+            } else {
+                startStatusUpdates();
+            }
+        });
+    </script>
+</body>
+</html>

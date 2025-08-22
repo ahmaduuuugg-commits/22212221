@@ -1,0 +1,100 @@
+2025-08-22T17:36:17.954791304Z [dotenv@17.2.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+2025-08-22T17:36:17.965530332Z 2025-08-22 17:36:17 [INFO]: Server running on port 10000
+2025-08-22T17:36:18.051080256Z 2025-08-22 17:36:17 [INFO]: Initializing Haxball room...
+2025-08-22T17:36:18.051824828Z 2025-08-22 17:36:18 [INFO]: Creating new Haxball room...
+2025-08-22T17:36:18.052175238Z 2025-08-22 17:36:18 [INFO]: Initializing Puppeteer browser...
+2025-08-22T17:36:20.856249279Z 2025-08-22 17:36:20 [INFO]: Browser initialized successfully
+2025-08-22T17:36:22.555325536Z 2025-08-22 17:36:22 [INFO]: Received SIGTERM, shutting down gracefully...
+2025-08-22T17:36:22.678760478Z ==> Your service is live 🎉
+2025-08-22T17:36:22.704456966Z ==> 
+2025-08-22T17:36:22.729369413Z ==> ///////////////////////////////////////////////////////////
+2025-08-22T17:36:22.75330131Z ==> 
+2025-08-22T17:36:22.778561678Z ==> Available at your primary URL https://pls-r4le.onrender.com
+2025-08-22T17:36:22.802473085Z ==> 
+2025-08-22T17:36:22.827425593Z ==> ///////////////////////////////////////////////////////////
+2025-08-22T17:36:25.694083204Z 2025-08-22 17:36:25 [INFO]: Navigated to Haxball headless page
+2025-08-22T17:36:28.751341247Z 2025-08-22 17:36:28 [INFO]: WebRTC test passed - connection candidates found
+2025-08-22T17:36:29.006697771Z 2025-08-22 17:36:29 [INFO]: Haxball API test result: 200
+2025-08-22T17:36:29.006845175Z 2025-08-22 17:36:29 [INFO]: Configuring tournament script with environment variables
+2025-08-22T17:36:29.007245357Z 2025-08-22 17:36:29 [INFO]: Attempting room creation with location: Turkey - Istanbul
+2025-08-22T17:36:29.008887334Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.ROOM_NAME
+2025-08-22T17:36:29.00908589Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of parseInt\(process\.env\.MAX_PLAYERS\)
+2025-08-22T17:36:29.009920594Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.GEO_CODE
+2025-08-22T17:36:29.009930924Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of parseFloat\(process\.env\.GEO_LAT\)
+2025-08-22T17:36:29.009935994Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of parseFloat\(process\.env\.GEO_LON\)
+2025-08-22T17:36:29.009940594Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.HAXBALL_TOKEN
+2025-08-22T17:36:29.009945074Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.DISCORD_WEBHOOK
+2025-08-22T17:36:29.010052767Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.DISCORD_CHANNEL_ID
+2025-08-22T17:36:29.010281474Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.DISCORD_REPORT_ROLE_ID
+2025-08-22T17:36:29.010471609Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.DISCORD_INVITE
+2025-08-22T17:36:29.010589063Z 2025-08-22 17:36:29 [INFO]: Replacing 1 instances of process\.env\.OWNER_PASSWORD
+2025-08-22T17:36:29.01641755Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: 🔍 Starting room initialization...
+2025-08-22T17:36:29.016739159Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: Token length: 39
+2025-08-22T17:36:29.052280878Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: Room name: 🎮 RHL TOURNAMENT 🎮
+2025-08-22T17:36:29.052302379Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: Geo location: JSHandle@object
+2025-08-22T17:36:29.052307789Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: ✅ HBInit function is available
+2025-08-22T17:36:29.052656409Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: 🚀 Calling HBInit with config...
+2025-08-22T17:36:29.052958878Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: Config details: JSHandle@object
+2025-08-22T17:36:29.055626474Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: ⏱️ HBInit took 38ms
+2025-08-22T17:36:29.055952804Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: ✅ Room object created successfully!
+2025-08-22T17:36:29.154105399Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: Room details: JSHandle@object
+2025-08-22T17:36:29.15412159Z 2025-08-22 17:36:29 [INFO]: Browser Console LOG: 🎮 RHL TOURNAMENT room is ready!
+2025-08-22T17:36:29.15412608Z 2025-08-22 17:36:29 [INFO]: Tournament script injected successfully
+2025-08-22T17:36:29.15413015Z 2025-08-22 17:36:29 [INFO]: Waiting for room initialization...
+2025-08-22T17:36:29.255909959Z 2025-08-22 17:36:29 [INFO]: Room link:
+2025-08-22T17:36:29.257486675Z 2025-08-22 17:36:29 [INFO]: Room test result:
+2025-08-22T17:36:29.258524724Z 2025-08-22 17:36:29 [INFO]: Heartbeat monitoring setup complete
+2025-08-22T17:36:29.258927176Z 2025-08-22 17:36:29 [INFO]: Haxball room created and monitoring started
+2025-08-22T17:36:29.259004848Z 2025-08-22 17:36:29 [INFO]: Haxball room initialization complete
+2025-08-22T17:37:59.437184017Z ==> Detected new open ports UDP:47392, UDP:52357
+2025-08-22T17:41:17.962500704Z 2025-08-22 17:41:17 [INFO]: Keepalive ping - Room status:
+2025-08-22T17:46:17.964167053Z 2025-08-22 17:46:17 [INFO]: Keepalive ping - Room status:
+2025-08-22T17:50:00.282950439Z ==> Detected service running on port 10000
+2025-08-22T17:50:00.400004836Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2025-08-22T17:51:17.96670011Z 2025-08-22 17:51:17 [INFO]: Keepalive ping - Room status:
+2025-08-22T17:51:24.74168055Z 2025-08-22 17:51:24 [INFO]: Received SIGTERM, shutting down gracefully...
+2025-08-22T17:51:29.42350152Z 2025-08-22 17:51:29 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:51:29.423671645Z 2025-08-22 17:51:29 [INFO]: Restarting Haxball room...
+2025-08-22T17:51:29.424075977Z 2025-08-22 17:51:29 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:51:39.425716894Z 2025-08-22 17:51:39 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:51:39.425786546Z 2025-08-22 17:51:39 [INFO]: Restarting Haxball room...
+2025-08-22T17:51:39.426100415Z 2025-08-22 17:51:39 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:51:49.427450657Z 2025-08-22 17:51:49 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:51:49.427473107Z 2025-08-22 17:51:49 [INFO]: Restarting Haxball room...
+2025-08-22T17:51:49.427477858Z 2025-08-22 17:51:49 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:51:59.427379304Z 2025-08-22 17:51:59 [INFO]: Restarting Haxball room...
+2025-08-22T17:51:59.428745043Z 2025-08-22 17:51:59 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:51:59.428759374Z 2025-08-22 17:51:59 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:51:59.428764184Z 2025-08-22 17:51:59 [INFO]: Restarting Haxball room...
+2025-08-22T17:51:59.428782974Z 2025-08-22 17:51:59 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:09.429059059Z 2025-08-22 17:52:09 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:09.42941585Z 2025-08-22 17:52:09 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:09.429698807Z 2025-08-22 17:52:09 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:52:09.42979965Z 2025-08-22 17:52:09 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:09.429995526Z 2025-08-22 17:52:09 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:19.428416565Z 2025-08-22 17:52:19 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:19.428695133Z 2025-08-22 17:52:19 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:19.429250389Z 2025-08-22 17:52:19 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:52:19.429343081Z 2025-08-22 17:52:19 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:19.429621799Z 2025-08-22 17:52:19 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:29.430970842Z 2025-08-22 17:52:29 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:29.434955187Z 2025-08-22 17:52:29 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:29.434970487Z 2025-08-22 17:52:29 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:29.435033409Z 2025-08-22 17:52:29 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:29.435037169Z 2025-08-22 17:52:29 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:52:29.435039489Z 2025-08-22 17:52:29 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:29.435041919Z 2025-08-22 17:52:29 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:39.432578519Z 2025-08-22 17:52:39 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:39.432883318Z 2025-08-22 17:52:39 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:39.433055663Z 2025-08-22 17:52:39 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:39.433330991Z 2025-08-22 17:52:39 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:39.43365947Z 2025-08-22 17:52:39 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:52:39.433773993Z 2025-08-22 17:52:39 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:39.4340019Z 2025-08-22 17:52:39 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:49.429354333Z 2025-08-22 17:52:49 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:49.429698443Z 2025-08-22 17:52:49 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:49.429832907Z 2025-08-22 17:52:49 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:49.430690792Z 2025-08-22 17:52:49 [ERROR]: Failed to restart room: Protocol error: Connection closed.
+2025-08-22T17:52:49.434275075Z 2025-08-22 17:52:49 [ERROR]: Room monitoring error: Attempted to use detached Frame '0FB06B1F0773C008238BB62133BF490C'.
+2025-08-22T17:52:49.434380558Z 2025-08-22 17:52:49 [INFO]: Restarting Haxball room...
+2025-08-22T17:52:49.434657536Z 2025-08-22 17:52:49 [ERROR]: Failed to restart room: Protocol error: Connection closed.
