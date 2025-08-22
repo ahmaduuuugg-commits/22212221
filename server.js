@@ -122,7 +122,7 @@ async function initBrowser() {
             '--disable-background-timer-throttling',
             '--disable-backgrounding-occluded-windows',
             '--disable-renderer-backgrounding',
-            // WebRTC support
+            // Enhanced WebRTC support for containers
             '--enable-webrtc',
             '--use-fake-ui-for-media-stream',
             '--use-fake-device-for-media-stream',
@@ -133,11 +133,21 @@ async function initBrowser() {
             '--ignore-ssl-errors',
             '--ignore-certificate-errors-spki-list',
             '--ignore-certificate-errors-ssl-errors',
-            // Additional network settings
+            // Enhanced network settings for WebRTC
             '--disable-background-networking',
             '--enable-features=NetworkService,NetworkServiceLogging',
             '--disable-ipc-flooding-protection',
             '--force-webrtc-ip-handling-policy=default',
+            '--enforce-webrtc-ip-permission-check=false',
+            '--webrtc-ip-handling-policy=default',
+            '--enable-webrtc-stun-origin',
+            '--allow-loopback-in-peer-connection',
+            '--disable-webrtc-apm-in-audio-service',
+            // Network and connectivity
+            '--enable-aggressive-domstorage-flushing',
+            '--enable-quic',
+            '--disable-background-timer-throttling',
+            '--disable-renderer-backgrounding',
             // Additional stability args
             '--disable-extensions',
             '--disable-plugins',
@@ -315,53 +325,106 @@ async function createHaxballRoom(locationIndex = 0) {
         // Wait for page to load
         await new Promise(resolve => setTimeout(resolve, 3000));
         
-        // Test WebRTC before creating room
-        const webrtcSupported = await page.evaluate(() => {
+        // Enhanced WebRTC test with multiple fallbacks
+        const webrtcResult = await page.evaluate(() => {
             return new Promise((resolve) => {
+                const results = {
+                    supported: false,
+                    candidatesFound: false,
+                    stunServersWorking: [],
+                    errors: [],
+                    detailedInfo: {}
+                };
+
                 if (!window.RTCPeerConnection) {
-                    resolve(false);
+                    results.errors.push('RTCPeerConnection not available');
+                    resolve(results);
                     return;
                 }
-                
-                const pc = new RTCPeerConnection({
-                    iceServers: [
-                        { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun1.l.google.com:19302' },
-                        { urls: 'stun:stun2.l.google.com:19302' }
-                    ]
-                });
-                
-                let candidatesFound = false;
-                const timeout = setTimeout(() => {
-                    pc.close();
-                    resolve(candidatesFound);
-                }, 10000);
-                
-                pc.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        candidatesFound = true;
-                        clearTimeout(timeout);
-                        pc.close();
-                        resolve(true);
-                    }
-                };
-                
-                pc.createDataChannel('test');
-                pc.createOffer().then(offer => {
-                    return pc.setLocalDescription(offer);
-                }).catch(() => {
-                    clearTimeout(timeout);
-                    pc.close();
-                    resolve(false);
+
+                const stunServers = [
+                    'stun:stun.l.google.com:19302',
+                    'stun:stun1.l.google.com:19302', 
+                    'stun:stun2.l.google.com:19302',
+                    'stun:stun.cloudflare.com:3478',
+                    'stun:stun.services.mozilla.com'
+                ];
+
+                let testCount = 0;
+                const maxTests = stunServers.length;
+
+                stunServers.forEach((stunServer, index) => {
+                    const pc = new RTCPeerConnection({
+                        iceServers: [{ urls: stunServer }]
+                    });
+                    
+                    let testCompleted = false;
+                    const timeout = setTimeout(() => {
+                        if (!testCompleted) {
+                            testCompleted = true;
+                            pc.close();
+                            testCount++;
+                            if (testCount === maxTests) {
+                                results.supported = results.candidatesFound || results.stunServersWorking.length > 0;
+                                resolve(results);
+                            }
+                        }
+                    }, 8000);
+                    
+                    pc.onicecandidate = (event) => {
+                        if (!testCompleted && event.candidate) {
+                            testCompleted = true;
+                            clearTimeout(timeout);
+                            results.candidatesFound = true;
+                            results.stunServersWorking.push(stunServer);
+                            pc.close();
+                            testCount++;
+                            if (testCount === maxTests) {
+                                results.supported = true;
+                                resolve(results);
+                            }
+                        }
+                    };
+                    
+                    pc.onicegatheringstatechange = () => {
+                        results.detailedInfo[stunServer] = pc.iceGatheringState;
+                    };
+                    
+                    pc.createDataChannel('test');
+                    pc.createOffer().then(offer => {
+                        return pc.setLocalDescription(offer);
+                    }).catch(error => {
+                        if (!testCompleted) {
+                            results.errors.push(`${stunServer}: ${error.message}`);
+                        }
+                    });
                 });
             });
         });
         
-        if (!webrtcSupported) {
-            throw new Error('WebRTC is not supported or blocked in this environment');
-        }
+        logger.info('WebRTC test results:', {
+            supported: webrtcResult.supported,
+            candidatesFound: webrtcResult.candidatesFound,
+            workingStunServers: webrtcResult.stunServersWorking,
+            totalStunServers: webrtcResult.stunServersWorking.length,
+            errors: webrtcResult.errors,
+            details: webrtcResult.detailedInfo
+        });
         
-        logger.info('WebRTC test passed - connection candidates found');
+        if (!webrtcResult.supported) {
+            const errorMessage = `WebRTC failed: ${webrtcResult.errors.join(', ')}`;
+            logger.error('❌ WebRTC Critical Error:', errorMessage);
+            logger.error('💡 This could be caused by:');
+            logger.error('   1. Container network restrictions (common in Docker/hosting)');
+            logger.error('   2. Firewall blocking UDP traffic');
+            logger.error('   3. STUN servers not accessible');
+            logger.error('   4. WebRTC disabled in browser flags');
+            
+            // Don't throw error, continue with warning
+            logger.warn('⚠️ Continuing room creation despite WebRTC issues - room may not work properly');
+        } else {
+            logger.info(`✅ WebRTC working - ${webrtcResult.stunServersWorking.length} STUN servers accessible`);
+        }
         
         // Test Haxball API accessibility
         try {
