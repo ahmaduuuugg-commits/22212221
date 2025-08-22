@@ -10,7 +10,7 @@ const ROOM_CONFIG = {
     maxPlayers: parseInt(process.env.MAX_PLAYERS) || 16,
     public: true,
     geo: { code: process.env.GEO_CODE || "eg", lat: parseFloat(process.env.GEO_LAT) || 30.0444, lon: parseFloat(process.env.GEO_LON) || 31.2357 },
-    token: process.env.HAXBALL_TOKEN || "thr1.AAAAAGioii7He5G3opmqIQ.QWVGQjVKkXc", // ✅ Reads from ENV!
+    token: process.env.HAXBALL_TOKEN || "thr1.AAAAAGio11Q2EBfxuQa_rw.jQaWin7JCvI", // ✅ Reads from ENV!
     iceServers: [
         { urls: "stun:stun.l.google.com:19302" },
         { urls: "stun:stun1.l.google.com:19302" },
