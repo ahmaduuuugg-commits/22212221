@@ -495,16 +495,77 @@ async function createHaxballRoom(locationIndex = 0) {
             throw new Error('Room initialization failed - timeout exceeded');
         }
         
-        // Get room link
+        // Get room link - check window.roomLink first (set by our script), then room object
         const roomLink = await page.evaluate(() => {
             try {
-                return window.location.href || 'No room link available';
+                // First check if our script set the roomLink
+                if (window.roomLink) {
+                    return window.roomLink;
+                }
+                
+                // Then check room object properties
+                if (window.room && window.room.link) {
+                    return window.room.link;
+                } else if (window.room && typeof window.room === 'object') {
+                    // Try to find room link in room properties
+                    for (let prop in window.room) {
+                        if (typeof window.room[prop] === 'string' && window.room[prop].includes('haxball.com/play')) {
+                            return window.room[prop];
+                        }
+                    }
+                    // Check if there's a method to get the link
+                    if (typeof window.room.getRoomLink === 'function') {
+                        return window.room.getRoomLink();
+                    }
+                    // If no direct link found, try to get from current URL hash or search params
+                    const currentUrl = window.location.href;
+                    if (currentUrl.includes('#')) {
+                        const hash = currentUrl.split('#')[1];
+                        if (hash && hash.length > 10) {
+                            return `https://www.haxball.com/play?c=${hash}`;
+                        }
+                    }
+                    return 'Room created but link not accessible - check room object properties: ' + Object.keys(window.room).join(', ');
+                } else {
+                    return 'No room object available - possible token issue';
+                }
             } catch (error) {
                 return 'Error getting room link: ' + error.message;
             }
         });
         
+        // Check for token-related issues in the logs
+        const tokenIssues = await page.evaluate(() => {
+            try {
+                const errors = window.initErrors || [];
+                const hasTokenError = errors.some(error => 
+                    error.includes('token') || 
+                    error.includes('invalid') || 
+                    error.includes('expired') ||
+                    error.includes('unauthorized')
+                );
+                return hasTokenError ? errors : null;
+            } catch (error) {
+                return null;
+            }
+        });
+        
         logger.info('Room link:', roomLink);
+        
+        // Warn about potential token issues
+        if (tokenIssues) {
+            logger.warn('Possible token-related issues detected:', tokenIssues);
+            logger.warn('💡 SOLUTION: Check if HAXBALL_TOKEN is valid and not expired. Get a fresh token from https://www.haxball.com/headlesstoken');
+        }
+        
+        // If room link looks suspicious, add additional warning
+        if (roomLink.includes('not accessible') || roomLink.includes('No room object')) {
+            logger.warn('⚠️  POTENTIAL ISSUE: Room created but link not accessible - this usually means:');
+            logger.warn('   1. HAXBALL_TOKEN is expired or invalid');
+            logger.warn('   2. Network connectivity issues');
+            logger.warn('   3. Haxball API changes');
+            logger.warn('   🔧 Try getting a fresh token from https://www.haxball.com/headlesstoken');
+        }
         
         // Test if room is actually accessible
         const roomTest = await page.evaluate(() => {
