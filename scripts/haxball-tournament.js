@@ -10,7 +10,7 @@ const ROOM_CONFIG = {
     maxPlayers: parseInt(process.env.MAX_PLAYERS) || 16,
     public: true,
     geo: { code: process.env.GEO_CODE || "eg", lat: parseFloat(process.env.GEO_LAT) || 30.0444, lon: parseFloat(process.env.GEO_LON) || 31.2357 },
-    token: process.env.HAXBALL_TOKEN || "thr1.AAAAAGio11Q2EBfxuQa_rw.jQaWin7JCvI", // ✅ Reads from ENV!
+    token: process.env.HAXBALL_TOKEN || "thr1.AAAAAGioii7He5G3opmqIQ.QWVGQjVKkXc", // ✅ Reads from ENV!
     iceServers: [
         { urls: "stun:stun.l.google.com:19302" },
         { urls: "stun:stun1.l.google.com:19302" },
@@ -118,19 +118,38 @@ try {
         
         console.log("Room details:", roomDetails);
         
-        // Check for room link in all possible properties
+        // Enhanced room link detection with multiple fallbacks
+        let roomLinkFound = false;
+        
+        // Method 1: Direct room object properties
         if (room.link) {
             console.log("🔗 Room link found in room.link:", room.link);
             window.roomLink = room.link;
+            roomLinkFound = true;
         } else if (room.roomLink) {
             console.log("🔗 Room link found in room.roomLink:", room.roomLink);
             window.roomLink = room.roomLink;
+            roomLinkFound = true;
         } else if (room.roomURL) {
             console.log("🔗 Room link found in room.roomURL:", room.roomURL);
             window.roomLink = room.roomURL;
-        } else {
-            console.log("⚠️ No room link found in room object properties:", Object.keys(room));
-            // Try to extract from current URL if room was created
+            roomLinkFound = true;
+        }
+        
+        // Method 2: Check all string properties for links
+        if (!roomLinkFound) {
+            for (let prop in room) {
+                if (typeof room[prop] === 'string' && room[prop].includes('haxball.com/play')) {
+                    console.log(`🔗 Room link found in room.${prop}:`, room[prop]);
+                    window.roomLink = room[prop];
+                    roomLinkFound = true;
+                    break;
+                }
+            }
+        }
+        
+        // Method 3: Extract from current URL
+        if (!roomLinkFound) {
             const currentUrl = window.location.href;
             if (currentUrl.includes('#')) {
                 const hash = currentUrl.split('#')[1];
@@ -138,8 +157,58 @@ try {
                     const generatedLink = `https://www.haxball.com/play?c=${hash}`;
                     console.log("🔗 Generated room link from URL hash:", generatedLink);
                     window.roomLink = generatedLink;
+                    roomLinkFound = true;
                 }
             }
+        }
+        
+        // Method 4: Try to get room code from room properties  
+        if (!roomLinkFound) {
+            // Look for room code or ID properties
+            const possibleCodeProps = ['code', 'id', 'roomCode', 'roomId', 'gameId'];
+            for (let prop of possibleCodeProps) {
+                if (room[prop] && typeof room[prop] === 'string' && room[prop].length > 8) {
+                    const generatedLink = `https://www.haxball.com/play?c=${room[prop]}`;
+                    console.log(`🔗 Generated room link from room.${prop}:`, generatedLink);
+                    window.roomLink = generatedLink;
+                    roomLinkFound = true;
+                    break;
+                }
+            }
+        }
+        
+        // Method 5: Fallback - try to trigger room link generation
+        if (!roomLinkFound) {
+            console.log("🔄 Attempting to trigger room link generation...");
+            try {
+                // Sometimes calling certain room methods helps generate the link
+                if (room.getPlayerList) {
+                    const players = room.getPlayerList();
+                    console.log("Player list called, rechecking for room link...");
+                    
+                    // Recheck after a delay
+                    setTimeout(() => {
+                        for (let prop in room) {
+                            if (typeof room[prop] === 'string' && room[prop].includes('haxball.com/play')) {
+                                console.log(`🔗 Room link found after delay in room.${prop}:`, room[prop]);
+                                window.roomLink = room[prop];
+                                roomLinkFound = true;
+                                break;
+                            }
+                        }
+                        if (!roomLinkFound) {
+                            console.log("⚠️ Still no room link found after all attempts");
+                        }
+                    }, 2000);
+                }
+            } catch (error) {
+                console.log("Error trying to trigger room link generation:", error);
+            }
+        }
+        
+        if (!roomLinkFound) {
+            console.log("⚠️ No room link found in room object properties:", Object.keys(room));
+            console.log("🔧 This is likely due to WebRTC connectivity issues in container environment");
         }
         
         // Make room available globally
