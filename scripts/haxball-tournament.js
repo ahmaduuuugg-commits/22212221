@@ -106,11 +106,41 @@ try {
     
     if (room) {
         console.log("✅ Room object created successfully!");
-        console.log("Room details:", {
+        
+        // Enhanced debugging for room object
+        const roomDetails = {
             name: room.name || 'no name',
             playerCount: room.getPlayerList ? room.getPlayerList().length : 'no getPlayerList method',
-            hasOnPlayerJoin: typeof room.onPlayerJoin === 'function'
-        });
+            hasOnPlayerJoin: typeof room.onPlayerJoin === 'function',
+            roomProperties: Object.keys(room),
+            roomLink: room.link || room.roomLink || room.roomURL || 'no link property found'
+        };
+        
+        console.log("Room details:", roomDetails);
+        
+        // Check for room link in all possible properties
+        if (room.link) {
+            console.log("🔗 Room link found in room.link:", room.link);
+            window.roomLink = room.link;
+        } else if (room.roomLink) {
+            console.log("🔗 Room link found in room.roomLink:", room.roomLink);
+            window.roomLink = room.roomLink;
+        } else if (room.roomURL) {
+            console.log("🔗 Room link found in room.roomURL:", room.roomURL);
+            window.roomLink = room.roomURL;
+        } else {
+            console.log("⚠️ No room link found in room object properties:", Object.keys(room));
+            // Try to extract from current URL if room was created
+            const currentUrl = window.location.href;
+            if (currentUrl.includes('#')) {
+                const hash = currentUrl.split('#')[1];
+                if (hash && hash.length > 10) {
+                    const generatedLink = `https://www.haxball.com/play?c=${hash}`;
+                    console.log("🔗 Generated room link from URL hash:", generatedLink);
+                    window.roomLink = generatedLink;
+                }
+            }
+        }
         
         // Make room available globally
         window.room = room;
