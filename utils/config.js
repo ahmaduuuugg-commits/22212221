@@ -45,7 +45,7 @@ const config = {
     MIN_RESTART_INTERVAL: parseInt(process.env.MIN_RESTART_INTERVAL) || 30000, // Min 30s between restarts
     MAX_RETRY_DELAY: parseInt(process.env.MAX_RETRY_DELAY) || 300000, // Max 5 min retry delay
     
-    // Enhanced browser configuration for stability
+    // Enhanced browser configuration for WebRTC connectivity
     BROWSER_ARGS: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -59,9 +59,30 @@ const config = {
         '--disable-background-timer-throttling',
         '--disable-backgrounding-occluded-windows',
         '--disable-renderer-backgrounding',
+        // CRITICAL WebRTC arguments for Render connectivity
+        '--enable-webrtc',
+        '--force-webrtc-ip-handling-policy=default',
+        '--webrtc-ip-handling-policy=default',
+        '--enable-webrtc-stun-origin',
+        '--allow-loopback-in-peer-connection',
+        '--enable-webrtc-hide-local-ips-with-mdns=false',
+        '--webrtc-max-cpu-consumption-percentage=100',
+        '--enable-features=WebRTC-H264WithOpenH264FFmpeg',
+        '--use-fake-ui-for-media-stream',
+        '--use-fake-device-for-media-stream',
+        '--allow-running-insecure-content',
+        '--ignore-certificate-errors',
+        '--ignore-ssl-errors',
+        '--ignore-certificate-errors-spki-list',
+        '--ignore-certificate-errors-ssl-errors',
+        // Network and permissions
+        '--enforce-webrtc-ip-permission-check=false',
+        '--disable-background-networking',
+        '--enable-features=NetworkService,NetworkServiceLogging',
+        '--disable-ipc-flooding-protection',
         // Additional stability args
         '--disable-extensions',
-        '--disable-plugins',
+        '--disable-plugins', 
         '--disable-images',
         '--disable-javascript-harmony-shipping',
         '--disable-client-side-phishing-detection',
