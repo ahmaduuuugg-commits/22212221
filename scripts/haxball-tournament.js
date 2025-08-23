@@ -12,15 +12,35 @@ const ROOM_CONFIG = {
     geo: { code: process.env.GEO_CODE || "eg", lat: parseFloat(process.env.GEO_LAT) || 30.0444, lon: parseFloat(process.env.GEO_LON) || 31.2357 },
     token: process.env.HAXBALL_TOKEN || "thr1.AAAAAGioii7He5G3opmqIQ.QWVGQjVKkXc", // ✅ Reads from ENV!
     iceServers: [
+        // STUN servers
         { urls: "stun:stun.l.google.com:19302" },
         { urls: "stun:stun1.l.google.com:19302" },
         { urls: "stun:stun2.l.google.com:19302" },
-        { urls: "stun:stun3.l.google.com:19302" },
-        { urls: "stun:stun4.l.google.com:19302" },
-        // Additional STUN servers for better connectivity
-        { urls: "stun:stun.sipnet.net" },
-        { urls: "stun:stun.sipnet.ru" },
-        { urls: "stun:stun.stunprotocol.org:3478" }
+        { urls: "stun:stun.cloudflare.com:3478" },
+        { urls: "stun:stun.services.mozilla.com" },
+        
+        // FREE TURN servers for NAT traversal (Critical for Render)
+        { 
+            urls: "turn:openrelay.metered.ca:80",
+            username: "openrelayproject",
+            credential: "openrelayproject"
+        },
+        { 
+            urls: "turn:openrelay.metered.ca:443",
+            username: "openrelayproject", 
+            credential: "openrelayproject"
+        },
+        {
+            urls: "turn:openrelay.metered.ca:443?transport=tcp",
+            username: "openrelayproject",
+            credential: "openrelayproject"
+        },
+        // Backup TURN servers
+        {
+            urls: "turn:relay1.expressturn.com:3478",
+            username: "ef8KQWS923K17WUJ2H",
+            credential: "ZLRSMhZdx97br5uy"
+        }
     ],
     // Optional: You can also try these locations for better Middle East connectivity:
     // geo: { code: "ae", lat: 25.2048, lon: 55.2708 }, // UAE - Dubai
