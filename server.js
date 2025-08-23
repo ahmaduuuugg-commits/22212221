@@ -133,15 +133,21 @@ async function initBrowser() {
             '--ignore-ssl-errors',
             '--ignore-certificate-errors-spki-list',
             '--ignore-certificate-errors-ssl-errors',
-            // Enhanced network settings for WebRTC
+            // CRITICAL WebRTC settings for NAT traversal
+            '--force-webrtc-ip-handling-policy=default',
+            '--webrtc-ip-handling-policy=default',
+            '--enable-webrtc-stun-origin', 
+            '--allow-loopback-in-peer-connection',
+            '--enable-webrtc-srtp-aes-gcm',
+            '--enable-webrtc-srtp-encrypted-headers',
+            '--enable-webrtc-hide-local-ips-with-mdns=false',
+            '--webrtc-max-cpu-consumption-percentage=100',
+            '--enable-features=WebRTC-H264WithOpenH264FFmpeg',
+            // Network settings for containers
             '--disable-background-networking',
             '--enable-features=NetworkService,NetworkServiceLogging',
             '--disable-ipc-flooding-protection',
-            '--force-webrtc-ip-handling-policy=default',
             '--enforce-webrtc-ip-permission-check=false',
-            '--webrtc-ip-handling-policy=default',
-            '--enable-webrtc-stun-origin',
-            '--allow-loopback-in-peer-connection',
             '--disable-webrtc-apm-in-audio-service',
             // Network and connectivity
             '--enable-aggressive-domstorage-flushing',
@@ -279,7 +285,7 @@ async function createHaxballRoom(locationIndex = 0) {
             logger.warn('Frame detached event:', frame.url());
         });
         
-        // Enable WebRTC permissions
+        // Enhanced WebRTC permissions and settings
         const context = browser.defaultBrowserContext();
         await context.overridePermissions('https://www.haxball.com', [
             'camera',
@@ -287,6 +293,38 @@ async function createHaxballRoom(locationIndex = 0) {
             'notifications',
             'geolocation'
         ]);
+        
+        // Critical: Set WebRTC IP handling policy for NAT traversal
+        await page.evaluateOnNewDocument(() => {
+            // Force WebRTC to use all available network interfaces
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                const originalGetUserMedia = navigator.mediaDevices.getUserMedia;
+                navigator.mediaDevices.getUserMedia = function(constraints) {
+                    return Promise.resolve({
+                        getTracks: () => [],
+                        addTrack: () => {},
+                        removeTrack: () => {},
+                        getVideoTracks: () => [],
+                        getAudioTracks: () => []
+                    });
+                };
+            }
+            
+            // Override WebRTC configuration to ensure TURN server usage
+            const originalRTCPeerConnection = window.RTCPeerConnection;
+            if (originalRTCPeerConnection) {
+                window.RTCPeerConnection = function(config) {
+                    // Ensure our TURN servers are always included
+                    if (config && config.iceServers) {
+                        config.iceServers = [...(config.iceServers || []), 
+                            { urls: "turn:openrelay.metered.ca:80", username: "openrelayproject", credential: "openrelayproject" },
+                            { urls: "turn:openrelay.metered.ca:443", username: "openrelayproject", credential: "openrelayproject" }
+                        ];
+                    }
+                    return new originalRTCPeerConnection(config);
+                };
+            }
+        });
         
         // Set user agent and other page settings
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
